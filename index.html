@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exodus 90 - Méditations</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1>Exodus 90</h1>
+                <p class="subtitle">Méditations 2026</p>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <p class="progress-text" id="progressText">0/31 jours complétés</p>
+            </div>
+            <div class="sidebar-content">
+                <ul class="day-list" id="dayList">
+                    <!-- Days will be injected here -->
+                </ul>
+            </div>
+            <div class="sidebar-footer">
+                <a href="admin.html" class="admin-link">Administration</a>
+            </div>
+        </nav>
+
+        <!-- Mobile Header -->
+        <header class="mobile-header">
+            <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <h1>Exodus 90</h1>
+            <div class="mobile-progress" id="mobileProgress">0/31</div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <div class="content-wrapper">
+                <!-- Day content will be injected here -->
+                <div class="welcome-screen" id="welcomeScreen">
+                    <div class="welcome-content">
+                        <h2>Bienvenue dans Exodus 90</h2>
+                        <p>Sélectionnez un jour dans le menu pour commencer votre méditation.</p>
+                        <button class="start-btn" onclick="loadDay(1)">Commencer Jour 1</button>
+                    </div>
+                </div>
+                <article class="day-content" id="dayContent" style="display: none;">
+                    <header class="day-header">
+                        <span class="day-number" id="dayNumber"></span>
+                        <h2 class="day-title" id="dayTitle"></h2>
+                        <p class="scripture-reference" id="scriptureRef"></p>
+                    </header>
+                    <div class="day-body" id="dayBody">
+                        <!-- Content sections will be here -->
+                    </div>
+                    <footer class="day-footer">
+                        <div class="completion-box">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="dayCompleted" onchange="toggleDayCompletion()">
+                                <span class="checkmark"></span>
+                                <span class="checkbox-label">J'ai terminé cette méditation</span>
+                            </label>
+                        </div>
+                        <nav class="day-navigation">
+                            <button class="nav-btn prev-btn" id="prevBtn" onclick="navigatePrev()">
+                                <span class="arrow">&larr;</span> Jour précédent
+                            </button>
+                            <button class="nav-btn next-btn" id="nextBtn" onclick="navigateNext()">
+                                Jour suivant <span class="arrow">&rarr;</span>
+                            </button>
+                        </nav>
+                    </footer>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <!-- Overlay for mobile menu -->
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+    <script src="meditations.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
