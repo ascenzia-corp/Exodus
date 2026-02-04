@@ -705,13 +705,24 @@
                     continue;
                 }
 
-                if (lower.includes('au nom du père') || lower.includes('in the name of the father')) {
+                if (lower.includes('au nom du p') || lower.includes('in the name of the father')) {
                     if (buffer.length > 0) {
                         assignSection(currentSection, buffer.join('\n\n'));
                     }
                     currentSection = 'openingPrayer';
                     buffer = [trimmed];
                     continue;
+                }
+
+                if (lower.includes('rappelons-nous') || lower.includes('let us remember')) {
+                    if (currentSection === 'intro' || currentSection === 'title') {
+                        if (buffer.length > 0) {
+                            assignSection(currentSection, buffer.join('\n\n'));
+                        }
+                        currentSection = 'openingPrayer';
+                        buffer = [trimmed];
+                        continue;
+                    }
                 }
 
                 if (lower.includes('lecture du livre') || lower.includes('a reading from')) {
