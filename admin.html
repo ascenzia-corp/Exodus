@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration - Exodus 90</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #8B4513;
+            --primary-dark: #5D2E0C;
+            --accent-color: #DAA520;
+            --background-light: #FAF8F5;
+            --background-white: #FFFFFF;
+            --text-dark: #2C2C2C;
+            --text-medium: #555555;
+            --border-color: #E8E4DF;
+            --success-color: #4CAF50;
+            --danger-color: #e74c3c;
+            --font-serif: 'Crimson Text', Georgia, serif;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .admin-header h1 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: var(--primary-dark);
+        }
+
+        .btn-primary:hover {
+            background: #c9961c;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #45a049;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Day List Panel */
+        .day-panel {
+            background: var(--background-white);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            background: var(--background-light);
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+        }
+
+        .day-list-admin {
+            list-style: none;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .day-list-admin li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .day-list-admin li:hover {
+            background: var(--background-light);
+        }
+
+        .day-list-admin li.active {
+            background: #FFF5E6;
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .day-list-admin li.has-content {
+            color: var(--success-color);
+        }
+
+        .day-list-admin .day-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .day-list-admin .day-num {
+            width: 28px;
+            height: 28px;
+            background: var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .day-list-admin li.has-content .day-num {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .day-status {
+            font-size: 0.75rem;
+            color: var(--text-medium);
+        }
+
+        /* Editor Panel */
+        .editor-panel {
+            background: var(--background-white);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .editor-header {
+            background: var(--background-light);
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .editor-header h2 {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            color: var(--primary-color);
+        }
+
+        .editor-body {
+            padding: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-group textarea.large {
+            min-height: 200px;
+        }
+
+        .form-group .hint {
+            font-size: 0.8rem;
+            color: var(--text-medium);
+            margin-top: 0.35rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .editor-footer {
+            padding: 1rem 1.5rem;
+            background: var(--background-light);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: var(--success-color);
+        }
+
+        .toast.error {
+            background: var(--danger-color);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow: auto;
+        }
+
+        .modal-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-family: var(--font-serif);
+            color: var(--primary-color);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-medium);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        .quick-paste-section {
+            background: #f0f7ff;
+            border: 1px solid #b3d4fc;
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quick-paste-section h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+        }
+
+        .quick-paste-section p {
+            font-size: 0.9rem;
+            color: var(--text-medium);
+            margin-bottom: 1rem;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 2rem;
+            padding: 1rem 1.25rem;
+            background: var(--background-light);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-medium);
+        }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <h1>Administration Exodus 90</h1>
+        <div class="header-actions">
+            <a href="index.html" class="btn btn-secondary">Voir le site</a>
+            <button class="btn btn-secondary" onclick="showImportModal()">Importer JSON</button>
+            <button class="btn btn-primary" onclick="exportData()">Exporter JSON</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="grid">
+            <!-- Day List -->
+            <div class="day-panel">
+                <div class="panel-header">Jours (1-90)</div>
+                <div class="stats-bar">
+                    <div class="stat-item">
+                        <div class="stat-value" id="statTotal">0</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="statRemaining">90</div>
+                        <div class="stat-label">Restants</div>
+                    </div>
+                </div>
+                <ul class="day-list-admin" id="adminDayList">
+                    <!-- Days will be generated here -->
+                </ul>
+            </div>
+
+            <!-- Editor -->
+            <div class="editor-panel">
+                <div class="editor-header">
+                    <h2 id="editorTitle">Sélectionnez un jour</h2>
+                    <div>
+                        <button class="btn btn-danger" id="deleteBtn" onclick="deleteCurrentDay()" style="display:none;">Supprimer</button>
+                    </div>
+                </div>
+                <div class="editor-body">
+                    <!-- Quick Paste Section -->
+                    <div class="quick-paste-section">
+                        <h4>Collage rapide</h4>
+                        <p>Collez ici le texte complet de la méditation. Le système essaiera de détecter automatiquement les sections (titre, référence, introduction, lecture, réflexion, prières).</p>
+                        <textarea id="quickPaste" placeholder="Collez le texte complet ici..." style="min-height: 150px; width: 100%; padding: 0.75rem; border: 1px solid #b3d4fc; border-radius: 8px;"></textarea>
+                        <button class="btn btn-primary" onclick="parseQuickPaste()" style="margin-top: 0.75rem;">Analyser et remplir</button>
+                    </div>
+
+                    <form id="meditationForm">
+                        <input type="hidden" id="currentDay" value="">
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="title">Titre</label>
+                                <input type="text" id="title" placeholder="Ex: Arrivée en Égypte">
+                            </div>
+                            <div class="form-group">
+                                <label for="scripture">Référence biblique</label>
+                                <input type="text" id="scripture" placeholder="Ex: Exode 1, 1-8">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="intro">Introduction</label>
+                            <textarea id="intro" placeholder="Message d'accueil et contexte du jour..."></textarea>
+                            <p class="hint">Le message de bienvenue et le contexte pour ce jour.</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="openingPrayer">Prière d'ouverture</label>
+                            <textarea id="openingPrayer" placeholder="Au nom du Père..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reading">Lecture du Livre de l'Exode</label>
+                            <textarea id="reading" class="large" placeholder="Le texte biblique..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reflection">Réflexion</label>
+                            <textarea id="reflection" class="large" placeholder="La méditation et réflexion spirituelle..."></textarea>
+                            <p class="hint">Séparez les paragraphes par des lignes vides.</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="closingPrayer">Prière de clôture</label>
+                            <textarea id="closingPrayer" placeholder="Père céleste..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="editor-footer">
+                    <button class="btn btn-secondary" onclick="clearForm()">Effacer</button>
+                    <button class="btn btn-success" onclick="saveMeditationForm()">Sauvegarder</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Import Modal -->
+    <div class="modal-overlay" id="importModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Importer des données JSON</h3>
+                <button class="modal-close" onclick="closeImportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 1rem; color: var(--text-medium);">Collez ici le JSON exporté précédemment pour restaurer les méditations.</p>
+                <textarea id="importJson" style="width: 100%; min-height: 200px; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-family: monospace; font-size: 0.85rem;"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeImportModal()">Annuler</button>
+                <button class="btn btn-success" onclick="doImport()">Importer</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="meditations.js"></script>
+    <script>
+        let currentEditDay = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderAdminDayList();
+            updateStats();
+        });
+
+        function renderAdminDayList() {
+            const list = document.getElementById('adminDayList');
+            const meditations = window.meditations || {};
+            let html = '';
+
+            for (let i = 1; i <= 90; i++) {
+                const hasContent = meditations[i] !== undefined;
+                const title = hasContent ? meditations[i].title : '';
+                const activeClass = currentEditDay === i ? 'active' : '';
+                const contentClass = hasContent ? 'has-content' : '';
+
+                html += `
+                    <li class="${activeClass} ${contentClass}" onclick="selectDay(${i})">
+                        <div class="day-info">
+                            <span class="day-num">${hasContent ? '✓' : i}</span>
+                            <span>Jour ${i}${title ? ': ' + title.substring(0, 20) + (title.length > 20 ? '...' : '') : ''}</span>
+                        </div>
+                        <span class="day-status">${hasContent ? 'Rempli' : 'Vide'}</span>
+                    </li>
+                `;
+            }
+
+            list.innerHTML = html;
+        }
+
+        function updateStats() {
+            const meditations = window.meditations || {};
+            const total = Object.keys(meditations).length;
+            document.getElementById('statTotal').textContent = total;
+            document.getElementById('statRemaining').textContent = 90 - total;
+        }
+
+        function selectDay(dayNum) {
+            currentEditDay = dayNum;
+            document.getElementById('currentDay').value = dayNum;
+            document.getElementById('editorTitle').textContent = `Jour ${dayNum}`;
+            document.getElementById('deleteBtn').style.display = 'inline-flex';
+
+            const meditation = window.meditations ? window.meditations[dayNum] : null;
+
+            if (meditation) {
+                document.getElementById('title').value = meditation.title || '';
+                document.getElementById('scripture').value = meditation.scripture || '';
+                document.getElementById('intro').value = meditation.intro || '';
+                document.getElementById('openingPrayer').value = meditation.openingPrayer || '';
+                document.getElementById('reading').value = meditation.reading || '';
+                document.getElementById('reflection').value = meditation.reflection || '';
+                document.getElementById('closingPrayer').value = meditation.closingPrayer || '';
+            } else {
+                clearForm(false);
+            }
+
+            document.getElementById('quickPaste').value = '';
+            renderAdminDayList();
+        }
+
+        function clearForm(clearQuickPaste = true) {
+            document.getElementById('title').value = '';
+            document.getElementById('scripture').value = '';
+            document.getElementById('intro').value = '';
+            document.getElementById('openingPrayer').value = '';
+            document.getElementById('reading').value = '';
+            document.getElementById('reflection').value = '';
+            document.getElementById('closingPrayer').value = '';
+            if (clearQuickPaste) {
+                document.getElementById('quickPaste').value = '';
+            }
+        }
+
+        function saveMeditationForm() {
+            if (!currentEditDay) {
+                showToast('Veuillez d\'abord sélectionner un jour', 'error');
+                return;
+            }
+
+            const meditation = {
+                title: document.getElementById('title').value.trim(),
+                scripture: document.getElementById('scripture').value.trim(),
+                intro: document.getElementById('intro').value.trim(),
+                openingPrayer: document.getElementById('openingPrayer').value.trim(),
+                reading: document.getElementById('reading').value.trim(),
+                reflection: document.getElementById('reflection').value.trim(),
+                closingPrayer: document.getElementById('closingPrayer').value.trim()
+            };
+
+            if (!meditation.title) {
+                showToast('Le titre est requis', 'error');
+                return;
+            }
+
+            saveMeditation(currentEditDay, meditation);
+            renderAdminDayList();
+            updateStats();
+            showToast(`Jour ${currentEditDay} sauvegardé avec succès!`, 'success');
+        }
+
+        function deleteCurrentDay() {
+            if (!currentEditDay) return;
+
+            if (confirm(`Êtes-vous sûr de vouloir supprimer le Jour ${currentEditDay}?`)) {
+                deleteMeditation(currentEditDay);
+                clearForm();
+                renderAdminDayList();
+                updateStats();
+                showToast(`Jour ${currentEditDay} supprimé`, 'success');
+            }
+        }
+
+        function parseQuickPaste() {
+            const text = document.getElementById('quickPaste').value.trim();
+            if (!text) {
+                showToast('Veuillez coller du texte d\'abord', 'error');
+                return;
+            }
+
+            // Patterns pour détecter les sections
+            const lines = text.split('\n');
+            let title = '';
+            let scripture = '';
+            let intro = '';
+            let openingPrayer = '';
+            let reading = '';
+            let reflection = '';
+            let closingPrayer = '';
+
+            let currentSection = 'title';
+            let buffer = [];
+
+            for (let line of lines) {
+                const trimmed = line.trim();
+                const lower = trimmed.toLowerCase();
+
+                // Détecter le titre (première ligne non vide)
+                if (!title && trimmed && !lower.includes('exode') && !lower.includes('exodus')) {
+                    title = trimmed;
+                    continue;
+                }
+
+                // Détecter la référence biblique
+                if (!scripture && (lower.includes('exode') || lower.includes('exodus')) && /\d/.test(trimmed)) {
+                    scripture = trimmed;
+                    continue;
+                }
+
+                // Détecter le début des sections
+                if (lower.includes('frères, bienvenue') || lower.includes('brothers, welcome') || lower.includes('bienvenue au jour')) {
+                    if (buffer.length > 0) {
+                        assignSection(currentSection, buffer.join('\n\n'));
+                    }
+                    currentSection = 'intro';
+                    buffer = [trimmed];
+                    continue;
+                }
+
+                if (lower.includes('au nom du père') || lower.includes('in the name of the father')) {
+                    if (buffer.length > 0) {
+                        assignSection(currentSection, buffer.join('\n\n'));
+                    }
+                    currentSection = 'openingPrayer';
+                    buffer = [trimmed];
+                    continue;
+                }
+
+                if (lower.includes('lecture du livre') || lower.includes('a reading from')) {
+                    if (buffer.length > 0) {
+                        assignSection(currentSection, buffer.join('\n\n'));
+                    }
+                    currentSection = 'reading';
+                    buffer = [];
+                    continue;
+                }
+
+                if (lower === 'réflexion' || lower === 'reflection') {
+                    if (buffer.length > 0) {
+                        assignSection(currentSection, buffer.join('\n\n'));
+                    }
+                    currentSection = 'reflection';
+                    buffer = [];
+                    continue;
+                }
+
+                if (lower.includes('prions') || lower.includes('let us pray')) {
+                    if (buffer.length > 0) {
+                        assignSection(currentSection, buffer.join('\n\n'));
+                    }
+                    currentSection = 'closingPrayer';
+                    buffer = [];
+                    continue;
+                }
+
+                if (lower.includes('père céleste') || lower.includes('heavenly father') || lower.includes('seigneur dieu')) {
+                    if (currentSection !== 'closingPrayer') {
+                        if (buffer.length > 0) {
+                            assignSection(currentSection, buffer.join('\n\n'));
+                        }
+                        currentSection = 'closingPrayer';
+                        buffer = [trimmed];
+                        continue;
+                    }
+                }
+
+                // Ajouter au buffer courant
+                if (trimmed) {
+                    buffer.push(trimmed);
+                } else if (buffer.length > 0) {
+                    buffer.push('');
+                }
+            }
+
+            // Assigner le dernier buffer
+            if (buffer.length > 0) {
+                assignSection(currentSection, buffer.join('\n\n'));
+            }
+
+            function assignSection(section, content) {
+                content = content.trim().replace(/\n{3,}/g, '\n\n');
+                switch(section) {
+                    case 'intro': intro = content; break;
+                    case 'openingPrayer': openingPrayer = content; break;
+                    case 'reading': reading = content; break;
+                    case 'reflection': reflection = content; break;
+                    case 'closingPrayer': closingPrayer = content; break;
+                }
+            }
+
+            // Remplir le formulaire
+            if (title) document.getElementById('title').value = title;
+            if (scripture) document.getElementById('scripture').value = scripture;
+            if (intro) document.getElementById('intro').value = intro;
+            if (openingPrayer) document.getElementById('openingPrayer').value = openingPrayer;
+            if (reading) document.getElementById('reading').value = reading;
+            if (reflection) document.getElementById('reflection').value = reflection;
+            if (closingPrayer) document.getElementById('closingPrayer').value = closingPrayer;
+
+            showToast('Texte analysé! Vérifiez les champs et ajustez si nécessaire.', 'success');
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function exportData() {
+            const json = exportMeditations();
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'exodus90_meditations.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Export téléchargé!', 'success');
+        }
+
+        function showImportModal() {
+            document.getElementById('importModal').classList.add('show');
+        }
+
+        function closeImportModal() {
+            document.getElementById('importModal').classList.remove('show');
+            document.getElementById('importJson').value = '';
+        }
+
+        function doImport() {
+            const json = document.getElementById('importJson').value.trim();
+            if (!json) {
+                showToast('Veuillez coller du JSON', 'error');
+                return;
+            }
+
+            if (importMeditations(json)) {
+                closeImportModal();
+                renderAdminDayList();
+                updateStats();
+                showToast('Import réussi!', 'success');
+            } else {
+                showToast('Erreur: JSON invalide', 'error');
+            }
+        }
+    </script>
+</body>
+</html>
