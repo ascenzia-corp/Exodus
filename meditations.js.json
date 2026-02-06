@@ -1,8 +1,3 @@
-// Exodus 90 Meditations Data
-// Les méditations peuvent être ajoutées via la page admin.html
-
-// Méditations par défaut (jours 1-31)
-const defaultMeditations = 
 {
   "1": {
     "title": "Arrivée en Égypte",
@@ -283,59 +278,4 @@ const defaultMeditations =
     "reflection": "Dans l'esprit des gens, la liberté rime souvent avec individualisme. Or, nul n'est autosuffisant, et plus nous cherchons à tout résoudre par nous-mêmes, plus nous nous retrouvons démunis. De même, Israël pensait pouvoir subvenir à tous ses besoins dans le désert, mais ses lamentations pitoyables témoignent de sa faiblesse. Aujourd'hui, nous constatons que le peuple d'Israël est capable de grandes choses lorsqu'il s'en remet à Dieu. Le Seigneur nourrit son peuple du pain du ciel et de l'eau du rocher. Il le prépare au combat contre Amalek, chef d'une tribu nomade qui parcourait la péninsule du Sinaï.\n\nTandis que Josué, dont le nom signifie « L’Éternel est salut », choisit des hommes pour son armée et les mène au combat, Moïse reprend son rôle de prêtre au sommet de la colline. Tant que Moïse lève les mains, tenant son bâton miraculeux, les Israélites triomphent des Amalécites. Lorsqu’il les abaisse, épuisé, ils subissent une défaite. Comprenant cela, Aaron et Hur font asseoir Moïse sur un rocher et soutiennent eux-mêmes ses mains jusqu’à la nuit tombée. Les Israélites remportent la victoire !\n\nPeu après, Jéthro, le beau-père de Moïse, revient avec sa femme Séphora et ses fils Guershom et Éliézer. Moïse témoigne à Jéthro un grand respect. Il lui raconte les merveilles du Seigneur : celui-ci a tenu les promesses qui l’avaient conduit hors de Madian. Jéthro était prêtre à Madian et partageait probablement le polythéisme des croyances du Proche-Orient. Moïse en vient à croire au seul vrai Dieu d’Israël : « Maintenant, je sais que le Seigneur est plus grand que tous les dieux, car il a délivré le peuple de la main des Égyptiens, qui l’opprimaient avec arrogance. »\n\nLe lendemain, Jehtro voit Moïse trancher tous les différends du matin au soir. Il adresse une correction fraternelle au puissant libérateur du peuple de Dieu, qui demeure son gendre : « Ce que tu fais n’est pas bien. Toi et le peuple qui t’accompagne allez vous épuiser, car la tâche est trop lourde pour toi ; tu ne peux pas l’accomplir seul. » Il conseille à Moïse de choisir des hommes pour juger les affaires mineures concernant un petit nombre de ses sujets, et de ne laisser à Moïse que les cas difficiles à traiter lui-même. Moïse écoute et suit son conseil à la lettre.\n\nAu début de l'Exode, nous avons vu comment Moïse a résisté à l'appel et a demandé au Seigneur d'envoyer quelqu'un d'autre. Bien que déçu par son manque de confiance, le Seigneur a accédé à sa demande en envoyant son frère Aaron comme porte-parole. Moïse est devenu un grand homme aux yeux de tous, et pourtant, aujourd'hui encore, nous constatons l'importance des autres hommes dans sa vie. Il a besoin de Josué pour mener son armée, et d'Aaron et de Hur pour le soutenir afin qu'ils remportent la victoire. Et Moïse a besoin de Jéthro pour lui révéler la vérité sur le fardeau insupportable qu'il s'était imposé.\n\nJethro prend le risque de corriger Moïse, et conclut en disant : « Si vous faites cela, et que Dieu vous l’ordonne, vous pourrez persévérer, et tout ce peuple retournera en paix chez lui. » Aussi exceptionnelle que fût la correction de Jethro, l’acceptation et la réaction simples de Moïse l’étaient encore plus. Il ne se défendit pas, ne fit pas valoir ses titres ni ne révéla à Jethro les merveilles que Dieu accomplissait manifestement à travers lui. Au contraire, nous voyons l’humilité de ce grand homme. Il voyait en Jethro une image de Dieu le Père qui le corrigeait par l’intermédiaire de son beau-père. Moïse écouta, et tout le peuple qui attendait de lui un guide trouva la paix.\n\nNous avons tous des appels personnels qui ne s'adressent à personne d'autre et qui exigent notre réponse personnelle. Le mensonge consiste à croire que nous devons répondre seuls à ces appels. C'est dans l'isolement que nous devenons vulnérables aux promesses du monde, aux tentations de notre nature humaine et aux vaines ruses du diable. En communion avec d'autres hommes, nous recevons le soutien nécessaire pour accomplir les appels que le Seigneur nous adresse. C'est pourquoi nos fraternités sont si importantes. Nous donnons à nos frères et nous recevons d'eux, et cette fraternité apporte la victoire à ceux que nous guidons.",
     "closingPrayer": "Père céleste, merci de nous avoir donné des frères avec qui entreprendre ce voyage – notre exode des pharaons modernes qui nous tiennent en esclavage – afin que nous puissions trouver une plus grande liberté pour t’adorer, te servir et trouver le repos en toi. Merci pour les frères qui nous accompagnent, qui nous soutiennent et qui nous aident dans le combat. Merci pour les frères qui nous guident et nous corrigent, afin que nous puissions cheminer vers toi avec plus de fidélité et de paix. Sois avec nous et avec nos frères tout au long de cette journée. Soutiens-nous dans notre voyage et ramène-nous à la liberté en toi. Merci pour notre seul et véritable frère, Jésus-Christ, qui rend toute fraternité possible. Nous prions en son nom, Jésus notre Seigneur. Amen.\n\nAu nom du Père, et du Fils, et du Saint-Esprit. Amen."
   }
-};
-
-// Charger les méditations depuis localStorage ou utiliser les défauts
-function loadMeditations() {
-    const saved = localStorage.getItem('exodus90_meditations');
-    if (saved) {
-        try {
-            return JSON.parse(saved);
-        } catch (e) {
-            console.error('Erreur de parsing des méditations:', e);
-        }
-    }
-    return defaultMeditations;
 }
-
-// Sauvegarder les méditations dans localStorage
-function saveMeditations(data) {
-    localStorage.setItem('exodus90_meditations', JSON.stringify(data));
-}
-
-// Ajouter ou mettre à jour une méditation
-function saveMeditation(dayNum, meditation) {
-    const meditations = loadMeditations();
-    meditations[dayNum] = meditation;
-    saveMeditations(meditations);
-    window.meditations = meditations;
-}
-
-// Supprimer une méditation
-function deleteMeditation(dayNum) {
-    const meditations = loadMeditations();
-    delete meditations[dayNum];
-    saveMeditations(meditations);
-    window.meditations = meditations;
-}
-
-// Exporter toutes les méditations en JSON
-function exportMeditations() {
-    return JSON.stringify(loadMeditations(), null, 2);
-}
-
-// Importer des méditations depuis JSON
-function importMeditations(jsonString) {
-    try {
-        const data = JSON.parse(jsonString);
-        saveMeditations(data);
-        window.meditations = data;
-        return true;
-    } catch (e) {
-        console.error('Erreur d\'import:', e);
-        return false;
-    }
-}
-
-// Initialiser les méditations globales
-window.meditations = loadMeditations();
