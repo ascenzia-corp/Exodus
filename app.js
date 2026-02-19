@@ -147,7 +147,7 @@ function loadDay(dayNum) {
     if (meditation.reading) {
         bodyHtml += `
             <section class="scripture-section">
-                <h3>Lecture du Livre de l'Exode</h3>
+                <h3>Lecture Exodus du jour</h3>
                 <div class="scripture-text">${formatParagraphs(meditation.reading)}</div>
             </section>
         `;
