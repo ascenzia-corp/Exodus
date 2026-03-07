@@ -1,4 +1,4 @@
-# Jour 61 – L'Homme Magnanime
+# Jour 62 – L'Homme Magnanime
 
 **Nombres 14, 10-11. 21-24. 36-38**
 
